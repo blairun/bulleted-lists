@@ -22,10 +22,12 @@ class EditLine
 
     cursor = selection.getHeadBufferPosition()
     line = @editor.lineTextForBufferRow(cursor.row)
+    # console.log(line.search(/\S/))
+    # console.log(cursor.column)
 
-    # when cursor is at middle of line, do a normal insert line
-    # unless inline continuation is enabled
-    if cursor.column < line.length && !config.get("inlineNewLineContinuation")
+    # when cursor is at middle of line, do a normal insert line unless inline continuation is enabled
+    # also normal newline when cursor is anywhere before the first character of a line
+    if (cursor.column <= line.search(/\S/)) || (cursor.column < line.length && !config.get("inlineNewLineContinuation"))
       return e.abortKeyBinding()
 
     lineMeta = new LineMeta(line)
@@ -33,11 +35,23 @@ class EditLine
       if lineMeta.isEmptyBody()
         @_insertNewlineWithoutContinuation(cursor)
       else
-        @_insertNewlineWithContinuation(lineMeta.nextLine)
+        @_insertNewlineWithContinuation(lineMeta.nextLine, selection)
     else
       e.abortKeyBinding()
 
-  _insertNewlineWithContinuation: (nextLine) ->
+  _insertNewlineWithContinuation: (nextLine, selection) ->
+    # remove trailing space(s) before before moving to new line
+    cursor = selection.getHeadBufferPosition()
+    line = @editor.lineTextForBufferRow(cursor.row)
+    # console.log(line)
+    @editor.selectToBeginningOfLine()
+    line = selection.getText()
+    line = line.replace(/\s+$/, '')
+    # console.log(line)
+    # console.log(cursor.column)
+    # console.log(line.length)
+    if cursor.column >= line.length
+      @editor.insertText(line)
     @editor.insertText("\n#{nextLine}")
 
   _insertNewlineWithoutContinuation: (cursor) ->
@@ -73,24 +87,18 @@ class EditLine
     if LineMeta.isList(line)
       i = line.search(/\S/) # returns index of first non-space character
       if line.substring(i, i+1) == "-"
-        @editor.moveToEndOfLine() # because if cursor is immediately before symbol then the next command doesn't work as expected
-        @editor.moveToFirstCharacterOfLine()
-        selection.selectRight()
+        @_beforeTabbing(selection)
         @editor.insertText("~")
         @editor.moveToEndOfLine()
       else if line.substring(i, i+1) == "~"
-        @editor.moveToEndOfLine()
-        @editor.moveToFirstCharacterOfLine()
-        selection.selectRight()
+        @_beforeTabbing(selection)
         @editor.insertText("+")
         @editor.moveToEndOfLine()
       else if line.substring(i, i+1) == "+"
-        @editor.moveToEndOfLine()
-        selection.indentSelectedRows()
-        @editor.moveToFirstCharacterOfLine()
-        selection.selectRight()
+        @_beforeTabbing(selection)
         @editor.insertText("-")
         @editor.moveToEndOfLine()
+        selection.indentSelectedRows()
       else
         selection.indentSelectedRows()
 
@@ -108,13 +116,18 @@ class EditLine
 
     head.row != tail.row || head.column != tail.column
 
+  _beforeTabbing: (selection) ->
+    # necessary for tabbing with soft line wrap enabled
+    @editor.moveToBeginningOfLine()
+    @editor.moveToFirstCharacterOfLine()
+    selection.selectRight()
+
   outdentListLine: (e, selection) ->
     return e.abortKeyBinding() if @_isRangeSelection(selection)
 
     cursor = selection.getHeadBufferPosition()
     line = @editor.lineTextForBufferRow(cursor.row)
-
-    console.log("here")
+    # console.log("indent")
 
     if LineMeta.isList(line)
       i = line.search(/\S/) # returns index of first non-space character
@@ -122,27 +135,31 @@ class EditLine
         selection.outdentSelectedRows()
         @editor.moveToEndOfLine()
         if line.substring(0, 1) == "-"
-          @editor.moveToFirstCharacterOfLine()
-          selection.selectRight()
+          @_beforeTabbing(selection)
           selection.selectRight()
           selection.delete()
       else if line.substring(i, i+1) == "~"
-        @editor.moveToEndOfLine()
-        @editor.moveToFirstCharacterOfLine()
-        selection.selectRight()
+        @_beforeTabbing(selection)
         @editor.insertText("-")
         @editor.moveToEndOfLine()
       else if line.substring(i, i+1) == "+"
-        @editor.moveToEndOfLine()
-        @editor.moveToFirstCharacterOfLine()
-        selection.selectRight()
+        @_beforeTabbing(selection)
         @editor.insertText("~")
         @editor.moveToEndOfLine()
       else
         selection.outdentSelectedRows()
 
-    else if @_isAtLineBeginning(line, cursor.column) # indent on start of line
+    else if @_isAtLineBeginning(line, cursor.column) # outdent on start of line
       selection.outdentSelectedRows()
+      # backspace after final out dent
+      # console.log("backspace beginning")
+      selection.backspace()
+
+      # if cursor isn't the beginning of a line and if it isn't following a space then add space
+      cursor = selection.getHeadBufferPosition()
+      line = @editor.lineTextForBufferRow(cursor.row)
+      if cursor.column != 0 && line.substring(cursor.column, cursor.column-1) != " "
+        @editor.insertText(" ")
     else
       e.abortKeyBinding()
 
@@ -154,3 +171,9 @@ class EditLine
     tail = selection.getTailBufferPosition()
 
     head.row != tail.row || head.column != tail.column
+
+  _beforeTabbing: (selection) ->
+    # necessary for tabbing with soft line wrap enabled
+    @editor.moveToBeginningOfLine()
+    @editor.moveToFirstCharacterOfLine()
+    selection.selectRight()
