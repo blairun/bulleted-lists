@@ -1,4 +1,4 @@
-utils = require "../utils"
+utils = require "./utils"
 
 # LIST_UL_TASK_REGEX = /// ^ (\s*) ([~*+-\.]) \s+ \[[xX\ ]\] \s* (.*) $ ///
 LIST_UL_REGEX      = /// ^ (\s*) + ([~*+-\.]) \s+ (.*) $ ///

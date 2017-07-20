@@ -1,5 +1,5 @@
-# config = require "../config"
-LineMeta = require "../helpers/line-meta"
+# config = require "./config"
+LineMeta = require "./line-meta"
 
 MAX_SKIP_EMPTY_LINE_ALLOWED = 5
 

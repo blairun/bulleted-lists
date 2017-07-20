@@ -25,7 +25,7 @@ module.exports =
 
     ["insert-new-line", "indent-list-line","outdent-list-line"].forEach (command) =>
       editorCommands["bulleted-lists:#{command}"] =
-        @registerCommand("./commands/edit-line",
+        @registerCommand("./edit-line",
           args: command, skipList: ["autocomplete-active"])
 
     @disposables.add(atom.commands.add("atom-text-editor", editorCommands))
