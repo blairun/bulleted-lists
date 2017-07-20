@@ -1,4 +1,4 @@
-config = require "../config"
+# config = require "../config"
 LineMeta = require "../helpers/line-meta"
 
 MAX_SKIP_EMPTY_LINE_ALLOWED = 5
@@ -27,7 +27,7 @@ class EditLine
 
     # when cursor is at middle of line, do a normal insert line unless inline continuation is enabled
     # also normal newline when cursor is anywhere before the first character of a line
-    if (cursor.column <= line.search(/\S/)) || (cursor.column < line.length && !config.get("inlineNewLineContinuation"))
+    if (cursor.column <= line.search(/\S/)) || (cursor.column < line.length) # && !config.get("inlineNewLineContinuation"))
       return e.abortKeyBinding()
 
     lineMeta = new LineMeta(line)
