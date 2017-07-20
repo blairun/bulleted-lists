@@ -22,12 +22,13 @@ class EditLine
 
     cursor = selection.getHeadBufferPosition()
     line = @editor.lineTextForBufferRow(cursor.row)
-    # console.log(line.search(/\S/))
     # console.log(cursor.column)
+    # console.log(line.search(/\S/))
 
     # when cursor is at middle of line, do a normal insert line unless inline continuation is enabled
     # also normal newline when cursor is anywhere before the first character of a line
-    if (cursor.column <= line.search(/\S/)) || (cursor.column < line.length) # && !config.get("inlineNewLineContinuation"))
+    if (cursor.column <= line.search(/\S/)) # || (cursor.column < line.length) && !config.get("inlineNewLineContinuation"))
+      # console.log("abort1")
       return e.abortKeyBinding()
 
     lineMeta = new LineMeta(line)
@@ -37,24 +38,44 @@ class EditLine
       else
         @_insertNewlineWithContinuation(lineMeta.nextLine, selection)
     else
+      # console.log("abort2")
       e.abortKeyBinding()
 
   _insertNewlineWithContinuation: (nextLine, selection) ->
     # remove trailing space(s) before before moving to new line
+    # console.log("continue list")
     cursor = selection.getHeadBufferPosition()
     line = @editor.lineTextForBufferRow(cursor.row)
     # console.log(line)
     @editor.selectToBeginningOfLine()
-    line = selection.getText()
-    line = line.replace(/\s+$/, '')
-    # console.log(line)
+    lineLeft = selection.getText()
+    lineLeft = lineLeft.replace(/\s+$/, '')
+    # console.log(lineLeft)
     # console.log(cursor.column)
-    # console.log(line.length)
-    if cursor.column >= line.length
-      @editor.insertText(line)
+    # console.log(lineLeft.length)
+    if cursor.column >= lineLeft.length
+      @editor.insertText(lineLeft)
+
+      # don't remove space when cursor is directly after a bullet
+      lineLeft = lineLeft.replace(/^\s+|\s+$/g,'')
+      # console.log(lineLeft.length)
+      if lineLeft.length <= 1
+        # console.log("space")
+        @editor.insertText(" ")
+
     @editor.insertText("\n#{nextLine}")
+    cursor = selection.getHeadBufferPosition()
+    # line = @editor.lineTextForBufferRow(cursor.row)
+    @editor.selectToEndOfLine()
+    lineRight = selection.getText()
+    # console.log(cursor.column)
+    # console.log(lineRight.length)
+    lineRight = lineRight.replace(/^\s+|\s+$/g,'')
+    # console.log(lineRight.length)
+    @editor.insertText(lineRight)
 
   _insertNewlineWithoutContinuation: (cursor) ->
+    # console.log("discontinue list")
     nextLine = "\n"
     currentIndentation = @editor.indentationForBufferRow(cursor.row)
 

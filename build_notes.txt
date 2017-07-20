@@ -1,26 +1,13 @@
 
 
 - bulleted-lists
-  ~ bug: on_enter don't remove space when cursor is one space past bullet
-  - bug: on_enter from mid-line doesn't add new bullet
-  - bug seems to prevent selecting
   - feature: home should take you to beginning of text (rather than bullet)
+  - add back in relevant settings options from markdown-writer
+  - use js/coffee linter(s) to clean up
+  - feature: add symbol groups like MS Word: -~+, O0#, ! !! !!!, 123
+  - feature: add strike-through equivalent maybe "x"
 
-  - create package
-    ~ save as my own package
-      - add back in relevant settings options from markdown-writer
-      - use js linter(s) to clean up
   - publish package
-
-
   - reinstall/re-enable markdown-writer
-
-  - other ideas
-    - add symbol groups like Word: -~+, O0#, ! !! !!!, 123
-    - strike-through equivalent _x
-
-
-
-
 
 

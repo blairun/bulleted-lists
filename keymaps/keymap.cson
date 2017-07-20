@@ -1,14 +1,11 @@
-# These are some necessary keymaps for Markdown Writer
-#
-# For additional keymaps provided, run command `Markdown Writer: Create Default Keymaps`
-# Refer to wiki: https://github.com/zhuochun/md-writer/wiki/Settings-for-Keymaps
-#
 # To disable these bundled keymaps, go to Atom:
 #
-#    settings -> packages -> Markdown Writer -> Disable keybindings
+#    settings -> packages -> bulleted-lists -> Disable keybindings
 #
+# "atom-workspace atom-text-editor:not([mini])":
+# caused issue with autcomplete by overriding the word suggestion
 
-"atom-workspace atom-text-editor:not([mini])":
+"atom-text-editor:not([mini])":
   "enter": "bulleted-lists:insert-new-line"
   "tab":   "bulleted-lists:indent-list-line"
   "shift-tab":  "bulleted-lists:outdent-list-line"
