@@ -23,7 +23,7 @@ module.exports =
   registerEditorCommands: ->
     editorCommands = {}
 
-    ["insert-new-line", "indent-list-line","outdent-list-line"].forEach (command) =>
+    ["insert-new-line", "indent-list-line", "outdent-list-line", "home-list-line"].forEach (command) =>
       editorCommands["bulleted-lists:#{command}"] =
         @registerCommand("./edit-line",
           args: command, skipList: ["autocomplete-active"])
@@ -44,4 +44,3 @@ module.exports =
         @modules[path] ?= require(path)
         moduleInstance = new @modules[path](options.args)
         moduleInstance.trigger(e)
-

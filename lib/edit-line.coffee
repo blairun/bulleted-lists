@@ -5,7 +5,7 @@ MAX_SKIP_EMPTY_LINE_ALLOWED = 5
 
 module.exports =
 class EditLine
-  # action: insert-new-line, indent-list-line
+  # actions: insert-new-line, indent-list-line, outdent-list-line, home-list-line
   constructor: (action) ->
     @action = action
     @editor = atom.workspace.getActiveTextEditor()
@@ -198,3 +198,40 @@ class EditLine
     @editor.moveToBeginningOfLine()
     @editor.moveToFirstCharacterOfLine()
     selection.selectRight()
+
+
+  # home should take you to beginning of text (rather than bullet)
+  homeListLine: (e, selection) ->
+    return e.abortKeyBinding() if @_isRangeSelection(selection)
+
+    cursor = selection.getHeadBufferPosition()
+    line = @editor.lineTextForBufferRow(cursor.row)
+
+    @editor.selectToBeginningOfLine()
+    lineLeft = selection.getText()
+    lineLeft = lineLeft.replace(/^\s+|\s+$/g,'')
+    console.log(lineLeft.length)
+
+    if LineMeta.isList(line) && !@_isAtLineBeginning(line, cursor.column) &&  lineLeft.length > 1
+      # console.log("home")
+      @editor.moveToFirstCharacterOfLine()
+      @editor.moveToBeginningOfNextWord()
+
+    # abortKeyBinding doesn't work as expected when cursor is at beginning of line
+    else if cursor.column == 0
+      @editor.moveToFirstCharacterOfLine()
+    else if @_isAtLineBeginning(line, cursor.column)
+      @editor.moveToBeginningOfLine()
+
+    else
+      # console.log("abort home")
+      e.abortKeyBinding()
+
+  _isRangeSelection: (selection) ->
+    head = selection.getHeadBufferPosition()
+    tail = selection.getTailBufferPosition()
+
+    head.row != tail.row || head.column != tail.column
+
+  _isAtLineBeginning: (line, col) ->
+    col == 0 || line.substring(0, col).trim() == ""

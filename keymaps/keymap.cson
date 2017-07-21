@@ -6,9 +6,12 @@
 # caused issue with autcomplete by overriding the word suggestion
 
 "atom-text-editor:not([mini])":
-  "enter": "bulleted-lists:insert-new-line"
-  "tab":   "bulleted-lists:indent-list-line"
+  "enter":      "bulleted-lists:insert-new-line"
+  "tab":        "bulleted-lists:indent-list-line"
   "shift-tab":  "bulleted-lists:outdent-list-line"
+
+"atom-text-editor":
+  "home":       "bulleted-lists:home-list-line"
 
 ".bulleted-lists atom-text-editor[mini]":
   "enter":  "core:confirm"

@@ -5,6 +5,16 @@
   "author": {
     "name": "blairun"
   },
+  "activationCommands": {
+    "atom-text-editor:not([mini])": [
+      "bulleted-lists:insert-new-line",
+      "bulleted-lists:indent-list-line",
+      "bulleted-lists:outdent-list-line"
+    ],
+    "atom-text-editor": [
+      "bulleted-lists:home-list-line"
+    ]
+  },
   "description": "Create bulleted lists in plain text. Based on a feature from the markdown-writer package.",
   "keywords": [],
   "repository": "https://github.com/blairun/bulleted-lists",

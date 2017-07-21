@@ -1,13 +1,14 @@
 
 
 - bulleted-lists
-  - feature: home should take you to beginning of text (rather than bullet)
-  - add back in relevant settings options from markdown-writer
-  - use js/coffee linter(s) to clean up
+  ~ bug: enter with only "- " should remove bullet rather than remove bullet and add new line
+    - act the same as shift-tab
+  - add back relevant settings options from markdown-writer
+    - mid-line continuation
+  - feature: make bulleted when cursor is at end of current line
+    - consume ctrl-tab rather than pressing home and "- "
   - feature: add symbol groups like MS Word: -~+, O0#, ! !! !!!, 123
-  - feature: add strike-through equivalent maybe "x"
-
-  - publish package
-  - reinstall/re-enable markdown-writer
-
-
+  - feature: add strike-through equivalent. maybe "x"
+  - update through git rather than atom during development
+      - git init, git pull <repository>
+      -
