@@ -1,11 +1,14 @@
 {
   "name": "bulleted-lists",
   "main": "./lib/bulleted-lists",
-  "version": "0.0.1",
-  "description": "Create bulleted lists in plain text. Based on a feature in the markdown-writer package by zhuochun.",
+  "version": "0.0.0",
+  "author": {
+    "name": "blairun"
+  },
+  "description": "Create bulleted lists in plain text. Based on a feature from the markdown-writer package.",
   "keywords": [
   ],
-  "repository": "https://github.com/atom/bulleted-lists",
+  "repository": "https://github.com/blairun/bulleted-lists",
   "license": "MIT",
   "engines": {
     "atom": ">=1.0.0 <2.0.0"

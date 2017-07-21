@@ -2,19 +2,22 @@
 
 Create and manage bulleted lists in plain text.
 
-- start a list with "- "
-- press enter to continue the list
-- press tab to mark the item partially complete "~ "
-- press tab again to mark the item complete "+ "
+- start a list with a hyphen: "- some text"
+- press enter to continue the list on the following line
+- press tab to mark the item partially complete "~ some text"
+- press tab again to mark the item complete "+ some text"
 - press tab again to indent to the next level
 
 #### example:
 <pre>
-- project name
-  - item one needs to be done
+- project one
+  - item one still needs to be done
+  - item two still needs to be done
+
+~ project two is partially complete
   ~ item two is partially complete
-    - press tab three times to indent further
-    ~ sub item partially complete
-    + sub item complete
-  + item three is complete
+    ~ sub item one is partially complete
+    + sub item two is complete
+
++ project three is complete
 </pre>
