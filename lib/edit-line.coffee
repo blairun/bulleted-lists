@@ -210,7 +210,7 @@ class EditLine
     @editor.selectToBeginningOfLine()
     lineLeft = selection.getText()
     lineLeft = lineLeft.replace(/^\s+|\s+$/g,'')
-    console.log(lineLeft.length)
+    # console.log(lineLeft.length)
 
     if LineMeta.isList(line) && !@_isAtLineBeginning(line, cursor.column) &&  lineLeft.length > 1
       # console.log("home")

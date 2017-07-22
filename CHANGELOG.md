@@ -1,3 +1,7 @@
-## 0.0.1
+## 0.1.5
 
-* nothing here yet
+* added home key binding
+
+## 0.1.1-4
+
+* Initial uploads to Atom
