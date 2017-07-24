@@ -1,10 +1,11 @@
 
 
 - bulleted-lists
-  - add relevant settings options from markdown-writer
+  - add settings for
     - mid-line continuation
-  - feature: make bulleted when cursor is at end of current line
+    - create list item when tab is pressed and cursor is at end of line
+  + feature: create list item when tab is pressed and cursor is at end of line
   - feature: add symbol groups like MS Word: -~+, O0#, ! !! !!!, 123
   - feature: add strike-through equivalent. maybe "x"
   - update through git rather than atom during development
-      - git init, git pull <repository>
+    - git init, git pull <repository>

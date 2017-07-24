@@ -104,9 +104,9 @@ class EditLine
 
     cursor = selection.getHeadBufferPosition()
     line = @editor.lineTextForBufferRow(cursor.row)
+    i = line.search(/\S/) # returns index of first non-space character
 
     if LineMeta.isList(line)
-      i = line.search(/\S/) # returns index of first non-space character
       if line.substring(i, i+1) == "-"
         @_beforeTabbing(selection)
         @editor.insertText("~")
@@ -126,7 +126,17 @@ class EditLine
     else if @_isAtLineBeginning(line, cursor.column) # indent on start of line
       selection.indent()
     else
-      e.abortKeyBinding()
+      # create list item when tab is pressed and cursor is at end of line
+      # console.log("cursor: ", cursor.column)
+      # console.log("beginning space: ", i)
+      # console.log("length: ", line.replace(/^\s+|\s+$/g,'').length)
+      if cursor.column >= i + line.replace(/^\s+|\s+$/g,'').length
+        @editor.moveToBeginningOfLine()
+        @editor.moveToFirstCharacterOfLine()
+        @editor.insertText("- ")
+        @editor.moveToEndOfLine()
+      else
+        e.abortKeyBinding()
 
   _isAtLineBeginning: (line, col) ->
     col == 0 || line.substring(0, col).trim() == ""
