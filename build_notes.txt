@@ -1,11 +1,8 @@
 
 
 - bulleted-lists
-  - add settings for
-    - mid-line continuation
-    - create list item when tab is pressed and cursor is at end of line
-  + feature: create list item when tab is pressed and cursor is at end of line
-  - feature: add symbol groups like MS Word: -~+, O0#, ! !! !!!, 123
+  - feature: choose bullet type with ctrl-1, ctrl-2, ctrl-3, like oneNote
+  - feature: switch between symbol groups like MS Word: -~+, O0#, ! !! !!!, 123...
   - feature: add strike-through equivalent. maybe "x"
   - update through git rather than atom during development
-    - git init, git pull <repository>
+    - git config http.sslVerify false, git init, git pull <repository>

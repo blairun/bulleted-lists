@@ -1,10 +1,19 @@
 {CompositeDisposable} = require "atom"
 
-# config = require "./config"
-# basicConfig = require "./config-basic"
 
 module.exports =
-  # config: basicConfig
+
+  config:
+    midLineContinuation:
+      type: "boolean"
+      default: true
+      description: "Continue lists when cursor is in the middle of an
+        existing bulleted line and Enter is pressed"
+    quickNewListItems:
+      type: "boolean"
+      default: true
+      description: "Create bulleted line when cursor is at end of normal
+        line and Tab is pressed"
 
   modules: {} # To cache required modules
   disposables: null # Composite disposable

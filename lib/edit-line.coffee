@@ -22,12 +22,17 @@ class EditLine
 
     cursor = selection.getHeadBufferPosition()
     line = @editor.lineTextForBufferRow(cursor.row)
+    i = line.search(/\S/) # returns index of first non-space character
     # console.log(cursor.column)
     # console.log(line.search(/\S/))
+    # console.log(i)
+    # console.log(line.replace(/^\s+|\s+$/g,'').length)
+    # console.log(atom.config.get("bulleted-lists.midLineContinuation"))
 
-    # when cursor is at middle of line, do a normal insert line unless inline continuation is enabled
+    # when cursor is in the middle of a line, do a normal newline unless inline continuation is enabled
     # also normal newline when cursor is anywhere before the first character of a line
-    if (cursor.column <= line.search(/\S/)) # || (cursor.column < line.length) && !config.get("inlineNewLineContinuation"))
+    if (cursor.column <= line.search(/\S/)) ||
+    (cursor.column < i + line.replace(/^\s+|\s+$/g,'').length && !atom.config.get("bulleted-lists.midLineContinuation"))
       # console.log("abort1")
       return e.abortKeyBinding()
 
@@ -73,6 +78,10 @@ class EditLine
     lineRight = lineRight.replace(/^\s+|\s+$/g,'')
     # console.log(lineRight.length)
     @editor.insertText(lineRight)
+    # next line fixes issue where mid line contiunation of wrapped text puts
+    # cursor at the end of the first row rather than end of the new bulleted line,
+    # so pressing enter again would split the wrapped line
+    @editor.moveToEndOfLine()
 
   _insertNewlineWithoutContinuation: (cursor) ->
     # console.log("discontinue list")
@@ -130,7 +139,8 @@ class EditLine
       # console.log("cursor: ", cursor.column)
       # console.log("beginning space: ", i)
       # console.log("length: ", line.replace(/^\s+|\s+$/g,'').length)
-      if cursor.column >= i + line.replace(/^\s+|\s+$/g,'').length
+      # console.log(atom.config.get("bulleted-lists.quickNewListItems"))
+      if cursor.column >= i + line.replace(/^\s+|\s+$/g,'').length && atom.config.get("bulleted-lists.quickNewListItems")
         @editor.moveToBeginningOfLine()
         @editor.moveToFirstCharacterOfLine()
         @editor.insertText("- ")
@@ -183,8 +193,9 @@ class EditLine
     else if @_isAtLineBeginning(line, cursor.column) # outdent on start of line
       selection.outdentSelectedRows()
       # backspace after final out dent
-      # console.log("backspace beginning")
-      selection.backspace()
+      if cursor.column == 0
+        # console.log("backspace beginning")
+        selection.backspace()
 
       # if cursor isn't the beginning of a line and if it isn't following a space then add space
       cursor = selection.getHeadBufferPosition()
