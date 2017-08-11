@@ -117,14 +117,28 @@ class EditLine
 
     if LineMeta.isList(line)
       if line.substring(i, i+1) == "-"
-        @_beforeTabbing(selection)
-        @editor.insertText("~")
-        @editor.moveToEndOfLine()
+        # console.log(line.length - i)
+        if line.length - i <= 2
+          # indent bullet (without cycling) when there is no text after the bullet
+          selection.indentSelectedRows()
+        else
+          @_beforeTabbing(selection)
+          @editor.insertText("~")
+          @editor.moveToEndOfLine()
       else if line.substring(i, i+1) == "~"
         @_beforeTabbing(selection)
         @editor.insertText("+")
         @editor.moveToEndOfLine()
       else if line.substring(i, i+1) == "+"
+        @_beforeTabbing(selection)
+        if atom.config.get("bulleted-lists.addStrikeThroughEquivalent")
+          @editor.insertText("x")
+          @editor.moveToEndOfLine()
+        else
+          @editor.insertText("-")
+          @editor.moveToEndOfLine()
+          selection.indentSelectedRows()
+      else if line.substring(i, i+1) == "x"
         @_beforeTabbing(selection)
         @editor.insertText("-")
         @editor.moveToEndOfLine()
@@ -164,14 +178,39 @@ class EditLine
     selection.selectRight()
 
   outdentListLine: (e, selection) ->
-    return e.abortKeyBinding() if @_isRangeSelection(selection)
+    # return e.abortKeyBinding() if @_isRangeSelection(selection)
 
+    if @_isRangeSelection(selection)
+      # regMatch = /^(\*|#|1\.)\s*/g
+      regMatch1 = /\n(-|~|\+|x)\s/g
+      SelectionRangeRows = selection.getBufferRowRange() # Instead of selection.getBufferRange()
+      beginRow = SelectionRangeRows[0]
+      endRow = SelectionRangeRows[1]
+      # check one row above first selected row to account for newline character
+      SelectionRange1 = [[beginRow - 1, 0], [endRow, @editor.lineTextForBufferRow(endRow).length]]
+
+      # abort if there is no fully outdented match
+      if !regMatch1.test(@editor.getTextInBufferRange(SelectionRange1))
+        # console.log(@editor.getTextInBufferRange(SelectionRange1))
+        # console.log("no fully outdented match")
+        return e.abortKeyBinding()
+
+      # remove bullets if at least one row is fully outdented
+      @editor.backwardsScanInBufferRange(regMatch1, SelectionRange1, (match) =>
+        # console.log("fully outdented match")
+        regMatch2 = /(-|~|\+|x)\s/g
+        SelectionRange2 = [[beginRow, 0], [endRow, @editor.lineTextForBufferRow(endRow).length]]
+        @editor.backwardsScanInBufferRange(regMatch2, SelectionRange2, (match) -> match.replace(""))
+        return)
+      return
+
+    # console.log("no range selection")
     cursor = selection.getHeadBufferPosition()
     line = @editor.lineTextForBufferRow(cursor.row)
-    # console.log("indent")
+    i = line.search(/\S/) # returns index of first non-space character
 
     if LineMeta.isList(line)
-      i = line.search(/\S/) # returns index of first non-space character
+      # i = line.search(/\S/) # returns index of first non-space character
       if line.substring(i, i+1) == "-"
         selection.outdentSelectedRows()
         @editor.moveToEndOfLine()
@@ -186,6 +225,10 @@ class EditLine
       else if line.substring(i, i+1) == "+"
         @_beforeTabbing(selection)
         @editor.insertText("~")
+        @editor.moveToEndOfLine()
+      else if line.substring(i, i+1) == "x"
+        @_beforeTabbing(selection)
+        @editor.insertText("+")
         @editor.moveToEndOfLine()
       else
         selection.outdentSelectedRows()

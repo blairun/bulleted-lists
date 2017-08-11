@@ -1,8 +1,9 @@
 
 
 - bulleted-lists
-  - feature: choose bullet type with ctrl-1, ctrl-2, ctrl-3, like oneNote
-  - feature: switch between symbol groups like MS Word: -~+, O0#, ! !! !!!, 123...
-  - feature: add strike-through equivalent. maybe "x"
-  - update through git rather than atom during development
-    - git config http.sslVerify false, git init, git pull <repository>
+   - bug: outdent selection: prevent removing bullet characters that aren't at beginning of a line
+   - feature: choose bullet type with ctrl-1, ctrl-2, ctrl-3, like OneNote
+   - feature: switch between symbol groups like MS Word: -~+, O0#, ! !! !!!, 123, *, ...
+   - change: allow tabbing in the middle of a line
+   - update through git rather than atom during development
+   - git config http.sslVerify false, git init, git pull <repository>

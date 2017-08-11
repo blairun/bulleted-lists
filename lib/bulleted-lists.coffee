@@ -8,12 +8,16 @@ module.exports =
       type: "boolean"
       default: true
       description: "Continue lists when cursor is in the middle of an
-        existing bulleted line and Enter is pressed"
+        existing bulleted line and Enter is pressed."
     quickNewListItems:
       type: "boolean"
       default: true
       description: "Create bulleted line when cursor is at end of normal
-        line and Tab is pressed"
+        line and Tab is pressed."
+    addStrikeThroughEquivalent:
+      type: "boolean"
+      default: false
+      description: "Add/recognize 'x' as a bullet. May require restart."
 
   modules: {} # To cache required modules
   disposables: null # Composite disposable

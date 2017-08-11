@@ -1,7 +1,10 @@
 utils = require "./utils"
 
 # LIST_UL_TASK_REGEX = /// ^ (\s*) ([~*+-\.]) \s+ \[[xX\ ]\] \s* (.*) $ ///
-LIST_UL_REGEX      = /// ^ (\s*) + ([~*+-\.]) \s+ (.*) $ ///
+if atom.config.get("bulleted-lists.addStrikeThroughEquivalent")
+  LIST_UL_REGEX      = /// ^ (\s*) + ([~*+-x\.]) \s+ (.*) $ ///
+else
+  LIST_UL_REGEX      = /// ^ (\s*) + ([~*+-\.]) \s+ (.*) $ ///
 
 incStr = (str) ->
   num = parseInt(str, 10)
