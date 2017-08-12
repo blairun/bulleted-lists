@@ -1,4 +1,4 @@
-## 0.3.0
+## 0.2.2
 
 + new: settings option for strike-through equivalent: 'x'
 + new: outdenting selections: if at least one line is fully outdented, then remove bullets in the whole selection
