@@ -1,9 +1,9 @@
 
 
 - bulleted-lists
-   - bug: outdent selection: prevent removing bullet characters that aren't at beginning of a line
-   - feature: choose bullet type with ctrl-1, ctrl-2, ctrl-3, like OneNote
-   - feature: switch between symbol groups like MS Word: -~+, O0#, ! !! !!!, 123, *, ...
-   - change: allow tabbing in the middle of a line
-   - update through git rather than atom during development
-   - git config http.sslVerify false, git init, git pull <repository>
+   - Add setting for auto capitalization
+   - Feature: backspace deletes whole bullet if it is the only character on line
+   - Feature: choose bullet type with ctrl-1, ctrl-2, ctrl-3, like OneNote
+   - Feature: switch between symbol groups like MS Word: -~+, O0#, ! !! !!!, 123, *, ...
+   - Update through git rather than atom during development
+   - Git config http.sslVerify false, Git init, git pull <repository>

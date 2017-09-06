@@ -1,3 +1,7 @@
+## 0.2.3
+
++ New: auto capitalize first letter of each line (after pressing tab or enter)
+
 ## 0.2.2
 
 + new: settings option for strike-through equivalent: 'x'

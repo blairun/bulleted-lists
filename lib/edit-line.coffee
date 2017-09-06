@@ -52,6 +52,17 @@ class EditLine
     cursor = selection.getHeadBufferPosition()
     line = @editor.lineTextForBufferRow(cursor.row)
     # console.log(line)
+
+    # auto capitalize first letter of current line before going to newline
+    @editor.moveToBeginningOfLine()
+    @editor.moveToFirstCharacterOfLine()
+    @editor.moveToBeginningOfNextWord()
+    selection.selectRight()
+    Up = selection.getText().toUpperCase()
+    @editor.insertText(Up)
+    @editor.moveToBeginningOfLine()
+    @editor.moveRight(cursor.column)
+
     @editor.selectToBeginningOfLine()
     lineLeft = selection.getText()
     lineLeft = lineLeft.replace(/\s+$/, '')
@@ -71,13 +82,31 @@ class EditLine
     @editor.insertText("\n#{nextLine}")
     cursor = selection.getHeadBufferPosition()
     # line = @editor.lineTextForBufferRow(cursor.row)
+
+    # auto capitalize first letter of new line
+    selection.selectRight()
+    Up = selection.getText().toUpperCase()
+    @editor.insertText(Up)
+
+    @editor.moveLeft()
     @editor.selectToEndOfLine()
     lineRight = selection.getText()
+
     # console.log(cursor.column)
     # console.log(lineRight.length)
     lineRight = lineRight.replace(/^\s+|\s+$/g,'')
-    # console.log(lineRight.length)
+    console.log(lineRight.length)
     @editor.insertText(lineRight)
+
+    # add space after new bullet when it is on last line of file
+    @editor.moveToBeginningOfLine()
+    @editor.moveToFirstCharacterOfLine()
+    @editor.selectToEndOfLine()
+    bulletLength = selection.getText()
+    if bulletLength.length == 1
+      @editor.moveToEndOfLine()
+      @editor.insertText(" ")
+
     # next line fixes issue where mid line contiunation of wrapped text puts
     # cursor at the end of the first row rather than end of the new bulleted line,
     # so pressing enter again would split the wrapped line
@@ -116,12 +145,20 @@ class EditLine
     i = line.search(/\S/) # returns index of first non-space character
 
     if LineMeta.isList(line)
+
+
       if line.substring(i, i+1) == "-"
         # console.log(line.length - i)
         if line.length - i <= 2
           # indent bullet (without cycling) when there is no text after the bullet
           selection.indentSelectedRows()
         else
+          # auto capitalize first letter of line
+          @editor.moveToBeginningOfLine()
+          @editor.moveToFirstCharacterOfLine()
+          @editor.moveToBeginningOfNextWord()
+          @_autoCapitalize(selection)
+
           @_beforeTabbing(selection)
           @editor.insertText("~")
           @editor.moveToEndOfLine()
@@ -155,10 +192,16 @@ class EditLine
       # console.log("length: ", line.replace(/^\s+|\s+$/g,'').length)
       # console.log(atom.config.get("bulleted-lists.quickNewListItems"))
       if cursor.column >= i + line.replace(/^\s+|\s+$/g,'').length && atom.config.get("bulleted-lists.quickNewListItems")
+
+        # auto capitalize first letter of line
         @editor.moveToBeginningOfLine()
+        @editor.moveToFirstCharacterOfLine()
+        @_autoCapitalize(selection)
+
         @editor.moveToFirstCharacterOfLine()
         @editor.insertText("- ")
         @editor.moveToEndOfLine()
+
       else
         e.abortKeyBinding()
 
@@ -176,6 +219,12 @@ class EditLine
     @editor.moveToBeginningOfLine()
     @editor.moveToFirstCharacterOfLine()
     selection.selectRight()
+
+  _autoCapitalize: (selection) ->
+    # auto capitalize first letter of line
+    selection.selectRight()
+    Up = selection.getText().toUpperCase()
+    @editor.insertText(Up)
 
   outdentListLine: (e, selection) ->
     # return e.abortKeyBinding() if @_isRangeSelection(selection)
