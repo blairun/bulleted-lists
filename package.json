@@ -12,8 +12,9 @@
       "bulleted-lists:outdent-list-line"
     ],
     "atom-text-editor": [
-      "bulleted-lists:home-list-line"
-    ]
+      "bulleted-lists:home-list-line",
+      "bulleted-lists:arrow-capitalize"
+      ]
   },
   "description": "Create bulleted lists in plain text. Based on a feature from the markdown-writer package.",
   "keywords": [],

@@ -12,6 +12,10 @@
 
 "atom-text-editor":
   "home":       "bulleted-lists:home-list-line"
+  "up":         "bulleted-lists:arrow-capitalize"
+  "down":       "bulleted-lists:arrow-capitalize"
+  "left":       "bulleted-lists:arrow-capitalize"
+  "right":      "bulleted-lists:arrow-capitalize"
 
 ".bulleted-lists atom-text-editor[mini]":
   "enter":  "core:confirm"

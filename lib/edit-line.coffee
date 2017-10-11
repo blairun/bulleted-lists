@@ -52,6 +52,7 @@ class EditLine
     cursor = selection.getHeadBufferPosition()
     line = @editor.lineTextForBufferRow(cursor.row)
     # console.log(line)
+    # console.log(cursor.column)
 
     # auto capitalize first letter of current line before going to newline
     @editor.moveToBeginningOfLine()
@@ -60,8 +61,7 @@ class EditLine
     selection.selectRight()
     Up = selection.getText().toUpperCase()
     @editor.insertText(Up)
-    @editor.moveToBeginningOfLine()
-    @editor.moveRight(cursor.column)
+    @editor.setCursorBufferPosition(cursor)
 
     @editor.selectToBeginningOfLine()
     lineLeft = selection.getText()
@@ -95,7 +95,7 @@ class EditLine
     # console.log(cursor.column)
     # console.log(lineRight.length)
     lineRight = lineRight.replace(/^\s+|\s+$/g,'')
-    console.log(lineRight.length)
+    # console.log(lineRight.length)
     @editor.insertText(lineRight)
 
     # add space after new bullet when it is on last line of file
@@ -138,15 +138,15 @@ class EditLine
     @editor.insertText(nextLine)
 
   indentListLine: (e, selection) ->
+    # console.log("here0")
     return e.abortKeyBinding() if @_isRangeSelection(selection)
 
     cursor = selection.getHeadBufferPosition()
     line = @editor.lineTextForBufferRow(cursor.row)
     i = line.search(/\S/) # returns index of first non-space character
-
+    # console.log("here1")
     if LineMeta.isList(line)
-
-
+      # console.log("here2")
       if line.substring(i, i+1) == "-"
         # console.log(line.length - i)
         if line.length - i <= 2
@@ -154,6 +154,7 @@ class EditLine
           selection.indentSelectedRows()
         else
           # auto capitalize first letter of line
+          # console.log("- to ~")
           @editor.moveToBeginningOfLine()
           @editor.moveToFirstCharacterOfLine()
           @editor.moveToBeginningOfNextWord()
@@ -348,3 +349,22 @@ class EditLine
 
   _isAtLineBeginning: (line, col) ->
     col == 0 || line.substring(0, col).trim() == ""
+
+
+  arrowCapitalize: (e, selection) ->
+    cursor = selection.getHeadBufferPosition()
+    line = @editor.lineTextForBufferRow(cursor.row)
+    # console.log(line)
+    # console.log(cursor.column)
+
+    if LineMeta.isList(line)
+      # auto capitalize first letter of current line before going to newline
+      @editor.moveToBeginningOfLine()
+      @editor.moveToFirstCharacterOfLine()
+      @editor.moveToBeginningOfNextWord()
+      selection.selectRight()
+      Up = selection.getText().toUpperCase()
+      @editor.insertText(Up)
+      @editor.setCursorBufferPosition(cursor)
+
+    return e.abortKeyBinding()

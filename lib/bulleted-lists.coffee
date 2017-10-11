@@ -18,6 +18,13 @@ module.exports =
       type: "boolean"
       default: false
       description: "Add/recognize 'x' as a bullet. May require restart."
+    # fileExtension:
+    #   title: "File Extension"
+    #   type: "string"
+    #   default: ".txt"
+      # description: ""
+      # default: config.getCurrentDefault("fileExtension")
+
 
   modules: {} # To cache required modules
   disposables: null # Composite disposable
@@ -36,7 +43,7 @@ module.exports =
   registerEditorCommands: ->
     editorCommands = {}
 
-    ["insert-new-line", "indent-list-line", "outdent-list-line", "home-list-line"].forEach (command) =>
+    ["insert-new-line", "indent-list-line", "outdent-list-line", "home-list-line", "arrow-capitalize"].forEach (command) =>
       editorCommands["bulleted-lists:#{command}"] =
         @registerCommand("./edit-line",
           args: command, skipList: ["autocomplete-active"])

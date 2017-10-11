@@ -1,6 +1,6 @@
-## 0.2.3
+## 0.2.3,4
 
-+ New: auto capitalize first letter of each line (after pressing tab or enter)
++ New: auto capitalize first letter of line (after pressing tab or enter or arrow keys)
 
 ## 0.2.2
 
