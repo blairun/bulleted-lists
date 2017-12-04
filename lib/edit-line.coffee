@@ -368,3 +368,15 @@ class EditLine
       @editor.setCursorBufferPosition(cursor)
 
     return e.abortKeyBinding()
+
+  backspaceBullet: (e, selection) ->
+    cursor = selection.getHeadBufferPosition()
+    line = @editor.lineTextForBufferRow(cursor.row)
+    # console.log(line)
+    # console.log(cursor.column)
+
+    if LineMeta.isList(line) && line.substring(0, cursor.column).trim() == "-"
+      # auto capitalize first letter of current line before going to newline
+      @editor.selectToBeginningOfWord()
+
+    return e.abortKeyBinding()

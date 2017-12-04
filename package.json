@@ -9,7 +9,8 @@
     "atom-text-editor:not([mini])": [
       "bulleted-lists:insert-new-line",
       "bulleted-lists:indent-list-line",
-      "bulleted-lists:outdent-list-line"
+      "bulleted-lists:outdent-list-line",
+      "bulleted-lists:backspace-bullet"
     ],
     "atom-text-editor": [
       "bulleted-lists:home-list-line",

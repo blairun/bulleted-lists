@@ -9,6 +9,7 @@
   "enter":      "bulleted-lists:insert-new-line"
   "tab":        "bulleted-lists:indent-list-line"
   "shift-tab":  "bulleted-lists:outdent-list-line"
+  "backspace":  "bulleted-lists:backspace-bullet"
 
 "atom-text-editor":
   "home":       "bulleted-lists:home-list-line"
